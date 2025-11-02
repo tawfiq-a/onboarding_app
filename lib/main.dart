@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'common_widgets/home_screen.dart';
+
 import 'common_widgets/onboarding_screen.dart';
 
 void main(){
