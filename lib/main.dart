@@ -1,8 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-import 'common_widgets/onboarding_screen.dart';
+import 'alarm/alarm_controller.dart';
+import 'features/location/controllers/location_controller.dart';
+import 'helpers/routes.dart';
 
 void main(){
   runApp(MyApp());
@@ -13,6 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _ = Get.put(LocationController());
+    Get.put(AlarmsController());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Flutter Onboarding App",
@@ -22,8 +27,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF0A0027),
 
       ),
-      home: OnboardingScreen(),
-
+     initialRoute: '/onboarding_screen',
+      getPages: pages,
 
 
 

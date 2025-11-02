@@ -16,7 +16,7 @@ class AppColors {
   static const Color gradientStart = Color(0xff100137);
   static const Color gradientEnd = Color(0xFF022893);
 
-  // Design-er shonge mil rakhar janyo ekta List toiri kora
+
   static const List<Color> backgroundGradient = [
     gradientStart,
     gradientEnd,

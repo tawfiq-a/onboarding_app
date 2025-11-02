@@ -3,7 +3,7 @@
 class UserLocation {
   final double latitude;
   final double longitude;
-  final String address; // Address jemon: "New York, USA"
+  final String address; // Address like: "New York, USA"
 
   UserLocation({
     required this.latitude,

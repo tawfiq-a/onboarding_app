@@ -10,16 +10,16 @@ import '../models/location_models.dart';
 
 class LocationController extends GetxController {
 
-  // Location data: Reactive variable jeta UI te location dekhanor janyo use hobe
+  // Location data
   final Rx<UserLocation> selectedLocation = UserLocation.initial.obs;
 
-  // Loading state: Location fetching cholche kina
+  // Loading state
   final RxBool isLoading = false.obs;
 
   Future<void> requestAndFetchLocation() async {
     isLoading.value = true;
 
-    // Step 1: Permission check
+    // Permission check
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -34,7 +34,7 @@ class LocationController extends GetxController {
       }
     }
 
-    // Step 2: Location fetch kora
+    // Location fetch
     try {
       Position position = await Geolocator.getCurrentPosition(
 
@@ -42,7 +42,7 @@ class LocationController extends GetxController {
         timeLimit: const Duration(seconds: 10),
       );
 
-      // Step 3: Coordinates theke address fetch kora
+      // Fetch address from coordinates
       String address = await _getAddressFromCoordinates(position.latitude, position.longitude);
 
       // Step 4: State update kora
@@ -65,17 +65,19 @@ class LocationController extends GetxController {
       );
 
     } catch (e) {
-      // ... (Error handling code is the same) ...
+      Get.snackbar("Error", "location fetch error: $e");
+
+
     } finally {
       isLoading.value = false;
     }
   }
 
-  // 👇 Ekhane Geocoding timeout handling add kora holo
+  //  Geocoding timeout handling
   Future<String> _getAddressFromCoordinates(double lat, double lon) async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon)
-          .timeout(const Duration(seconds: 5)); // 👈 5 second timeout add kora holo
+          .timeout(const Duration(seconds: 5));
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
@@ -84,16 +86,13 @@ class LocationController extends GetxController {
       }
       return "Unknown Location";
     } catch (e) {
-      // Timeout ba kono network shomoshar janyo Geocoding fail hole
+
       print("Geocoding failed error: $e");
-      return "Geocoding Failed"; // Eta snack bar-e dekha jabe
+      return "Geocoding Failed";
     }
   }
 
   void proceedToHome() {
-    // Location select howar por Home Screen-e navigate kora
-   Get.toNamed("/home_screen");
-
-
-  }
+    // navigate to home screen if location is selected
+    Get.toNamed("/home_screen");}
 }

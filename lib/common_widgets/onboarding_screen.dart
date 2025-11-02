@@ -22,7 +22,7 @@ class OnboardingScreen extends StatelessWidget {
       body: GradientBackground(
         child: Stack(
           children: [
-            // 1. PageView - main content
+            //  PageView - main content
             PageView.builder(
               controller: controller.pageController,
               itemCount: OnboardingModel.onboardingData.length,
@@ -38,13 +38,19 @@ class OnboardingScreen extends StatelessWidget {
 
             // 2. Dots & Buttons
             Container(
-              alignment: const Alignment(0, 0.95), // Bottom alignment
+              alignment: const Alignment(0, 0.95),
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // Page Indicator Dots
                   SmoothPageIndicator(
+                    onDotClicked: (index) => controller.pageController.animateToPage(
+                      index,
+                      duration: const Duration(seconds:3),
+                      curve: Curves.easeIn,
+                    ),
+
                     controller: controller.pageController,
                     count: OnboardingModel.onboardingData.length,
                     effect: const ExpandingDotsEffect(
@@ -54,11 +60,12 @@ class OnboardingScreen extends StatelessWidget {
                       dotHeight: 10,
                       dotWidth: 10,
                       spacing: 5,
+
                     ),
                   ),
                   const SizedBox(height: 30),
 
-                  // Next/Get Started Button
+                  // Next/ Get Started Button
                   SizedBox(
                     width: double.infinity,
                     height: 55,
@@ -78,7 +85,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
             ),
 
-            // 3. Skip Button
+            //  Skip Button
             Positioned(
               top: 50,
               right: 20,
@@ -139,7 +146,7 @@ class OnboardingPage extends StatelessWidget {
           ),
         ),
 
-        // Bottom Half: Text Content
+        // Text Content
         Expanded(
           flex: 4,
           child: Container(
@@ -158,7 +165,7 @@ class OnboardingPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 15),
-                // Description (Smaller White Text)
+                // Description
                 Text(
                   description,
                   style: TextStyle(
