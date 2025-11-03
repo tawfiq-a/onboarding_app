@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
+import '../../../constants/app_colors.dart';
 import '../models/location_models.dart';
 
 
@@ -15,9 +16,16 @@ class LocationController extends GetxController {
 
   // Loading state
   final RxBool isLoading = false.obs;
+  // fetched location
+  final fetchedLocation = ''.obs;
+
+  bool get isLocationSelected => selectedLocation.value.latitude != 0.0 && selectedLocation.value.longitude != 0.0;
+
 
   Future<void> requestAndFetchLocation() async {
     isLoading.value = true;
+    // Clear fetched location
+    fetchedLocation.value = '';
 
     // Permission check
     LocationPermission permission = await Geolocator.checkPermission();
@@ -28,7 +36,7 @@ class LocationController extends GetxController {
         Get.snackbar(
           "Permission Denied",
           "Please grant location access from settings to use this feature.",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
         return;
       }
@@ -37,7 +45,6 @@ class LocationController extends GetxController {
     // Location fetch
     try {
       Position position = await Geolocator.getCurrentPosition(
-
         desiredAccuracy: LocationAccuracy.bestForNavigation,
         timeLimit: const Duration(seconds: 10),
       );
@@ -53,12 +60,16 @@ class LocationController extends GetxController {
       );
 
 
+
+      fetchedLocation.value = address.contains("Geocoding Failed") ? 'Location Found (Check Logs)' : address;
+
+
       Get.snackbar(
           "Location Fetched",
           address.contains("Geocoding Failed")
               ? "Geocoding failed. Using coordinates: ${position.latitude.toStringAsFixed(3)}, ${position.longitude.toStringAsFixed(3)}"
               : "Location fetched: $address",
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: const Duration(seconds: 3),
           backgroundColor: Colors.green,
           colorText: Colors.white,
@@ -93,6 +104,18 @@ class LocationController extends GetxController {
   }
 
   void proceedToHome() {
-    // navigate to home screen if location is selected
-    Get.toNamed("/home_screen");}
+    if (isLocationSelected) {
+      Get.toNamed("/home_screen");
+    } else {
+      Get.snackbar(
+        "Location Required",
+        "Please use 'Use Current Location' to fetch your location first.",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.orange,
+        colorText: AppColors.white,
+
+        duration: const Duration(seconds: 1),
+      );
+    }
+  }
 }

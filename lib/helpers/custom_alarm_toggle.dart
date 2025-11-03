@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../alarm/alarm_controller.dart';
-// Use the new controller
 
-import 'alarm_model.dart';          // Use the new model
+
+
+import '../features/alarm/alarm_controller.dart';
+import 'alarm_model.dart';
 
 class AlarmToggleWidget extends GetView<AlarmsController> {
   final AlarmModel alarm;
@@ -12,13 +13,13 @@ class AlarmToggleWidget extends GetView<AlarmsController> {
 
   @override
   Widget build(BuildContext context) {
-    // We use the current state of the AlarmModel object for display
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      margin: const EdgeInsets.only(bottom: 15), // Add vertical spacing
+      margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
         color: Colors.deepPurple.shade900,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
@@ -30,7 +31,7 @@ class AlarmToggleWidget extends GetView<AlarmsController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 1. Tappable Time Display
+          // Tappable Time Display
           InkWell(
             onTap: () => controller.selectTime(alarm.id),
             child: Text(
@@ -43,24 +44,25 @@ class AlarmToggleWidget extends GetView<AlarmsController> {
             ),
           ),
 
-          const SizedBox(width: 10),
+          Spacer(),
 
-          // 2. Tappable Date Display
+          // Tappable Date Display
           InkWell(
             onTap: () => controller.selectDate(alarm.id),
             child: Text(
               controller.formatDate(alarm.time),
               style: TextStyle(
                 color: Colors.white.withOpacity(0.7),
-                fontSize: 18,
+                fontSize: 20,
               ),
             ),
           ),
 
-          const Spacer(),
+          const SizedBox(width: 10),
 
-          // 3. Switch Control
-          // We don't use Obx here, as the parent Obx rebuilds the whole list when alarms.refresh() is called.
+
+          //  Switch Control
+
           Switch(
             value: alarm.isOn,
             onChanged: (newValue) => controller.toggleAlarm(alarm.id, newValue),

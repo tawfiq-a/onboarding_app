@@ -1,12 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../constants/gradient_background.dart';
 import '../features/location/controllers/location_controller.dart';
-
-
 
 class LocationScreen extends StatelessWidget {
   const LocationScreen({super.key});
@@ -32,7 +28,7 @@ class LocationScreen extends StatelessWidget {
                 Column(
                   children: [
                     SizedBox(height: size.height * 0.05),
-          
+
                     // Title
                     const Text(
                       "Welcome! Your Smart Travel Alarm",
@@ -44,7 +40,7 @@ class LocationScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-          
+
                     // Description
                     Text(
                       "Stay on schedule and enjoy every \n moment of your journey.", // Design-er text
@@ -55,9 +51,7 @@ class LocationScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: size.height * 0.05),
-          
-          
-          
+
                     ClipRRect(
                       child: Image.asset(
                         'assets/locationImage.png',
@@ -68,8 +62,8 @@ class LocationScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-          
+                const SizedBox(height: 100),
+
                 //  Bottom Actions (Location Status & Buttons)
                 Column(
                   children: [
@@ -80,9 +74,7 @@ class LocationScreen extends StatelessWidget {
                       child: ElevatedButton.icon(
                         onPressed: controller.requestAndFetchLocation,
 
-
                         style: ElevatedButton.styleFrom(
-          
                           backgroundColor: AppColors.gradientEnd,
                           foregroundColor: AppColors.white,
                           shape: RoundedRectangleBorder(
@@ -90,28 +82,58 @@ class LocationScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                         ),
-                        icon: Obx(() => controller.isLoading.value
-                            ? const CircularProgressIndicator(color: AppColors.white)
-                            : const Icon(Icons.location_on_outlined, size: 24)),
-                        label: Obx(() => Text(
-                          controller.isLoading.value
-                              ? 'Fetching Location...'
-                              : 'Use-Current Location',
-                          style: const TextStyle(fontSize: 18),
-                        )),
+                        icon: Obx(
+                          () =>
+                              controller.isLoading.value
+                                  ? const CircularProgressIndicator(
+                                    color: AppColors.white,
+                                  )
+                                  : const Icon(
+                                    Icons.location_on_outlined,
+                                    size: 24,
+                                  ),
+                        ),
+                        label: Obx(() {
+                          if (controller.isLoading.value) {
+                            return const Text(
+                              'Fetching Location...',
+                              style: TextStyle(fontSize: 18),
+                            );
+                          }
+
+                          if (controller.fetchedLocation.isNotEmpty &&
+                              controller.fetchedLocation.value !=
+                                  'Location Found (Check Logs)') {
+                            return Text(
+                              controller
+                                  .fetchedLocation
+                                  .value,
+                              style: const TextStyle(fontSize: 16),
+                              overflow:
+                                  TextOverflow
+                                      .ellipsis,
+                              maxLines: 1,
+                            );
+                          }
+
+
+                          return const Text(
+                            'Use Current Location',
+                            style: TextStyle(fontSize: 18),
+                          );
+                        }),
                       ),
                     ),
                     const SizedBox(height: 20),
-          
+
                     // Proceed Button
                     SizedBox(
                       width: double.infinity,
                       height: 55,
                       child: ElevatedButton(
-                        onPressed: (){
+                        onPressed: () {
                           controller.proceedToHome();
                         },
-
 
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryPurple,
@@ -120,8 +142,11 @@ class LocationScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                         ),
-          
-                        child: const Text('Home', style: TextStyle(fontSize: 18)),
+
+                        child: const Text(
+                          'Home',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ),
                   ],

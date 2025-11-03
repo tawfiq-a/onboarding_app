@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../alarm/alarm_controller.dart';
+
 import '../constants/gradient_background.dart';
+import '../features/alarm/alarm_controller.dart';
 import '../features/location/controllers/location_controller.dart';
-import '../helpers/alarm_custom.dart';
-// Note: Removed unused import '../helpers/alarm_custom.dart';
+import '../helpers/custom_alarm_toggle.dart';
+
 
 
 class HomeScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   final LocationController locationController = Get.find();
 
-  // 💡 Instantiate the AlarmsController
+
   final AlarmsController alarmsController = Get.put(AlarmsController());
 
   final TextEditingController textController = TextEditingController();
@@ -27,15 +28,16 @@ class HomeScreen extends StatelessWidget {
     textController.text = locationController.selectedLocation.value.address;
 
     return Scaffold(
-      // 🌟 STEP 1: Add the Floating Action Button
+      // Add the Floating Action Button
       floatingActionButton: FloatingActionButton(
+
         onPressed: () {
           // Add a new alarm set for 1 hour from the current time
           alarmsController.addAlarm(DateTime.now().add(const Duration(hours: 1)));
         },
         backgroundColor: Colors.blueAccent.shade700,
         shape: const CircleBorder(),
-        child: const Icon(Icons.add_alarm, color: Colors.white, size: 30),
+        child: const Icon(Icons.add, color: Colors.white, size: 50),
       ),
 
       body: GradientBackground(
@@ -56,17 +58,19 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 TextField(
+                  textAlign: TextAlign.center,
                   readOnly: true,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white, fontSize: 20,),
+
                   controller: textController,
                   decoration: const InputDecoration(
+
                     filled: true,
                     fillColor: Colors.white10,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                     ),
-                    labelText: "Location",
                     labelStyle: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -82,19 +86,19 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // 🌟 STEP 2: Use Obx to display the list of alarms dynamically
+
                 Obx(
                       () => Column(
                     children: alarmsController.alarms.map((alarm) {
-                      // 🌟 Use the new AlarmToggleWidget
+
                       return AlarmToggleWidget(
-                        key: ValueKey(alarm.id), // Important for performance and state
+                        key: ValueKey(alarm.id),
                         alarm: alarm,
                       );
                     }).toList(),
                   ),
                 ),
-                // Add padding at the bottom to ensure the last alarm is not hidden by the FAB
+
                 const SizedBox(height: 80),
               ],
             ),
